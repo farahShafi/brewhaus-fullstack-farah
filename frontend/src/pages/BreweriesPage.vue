@@ -60,7 +60,7 @@ onUnmounted(() => {
         
         <Header :image="breweryImage" title="Breweries"></Header>
         <div :class="['banner', sourceStore.source === 'public' ? 'banner-public' : 'banner-internal']">
-            data loaded from {{ sourceStore.source === 'public' ? 'Open Brewery DB https://www.openbrewerydb.org/documentation' : 'Internal Node.js API' }}
+            data loaded from {{ sourceStore.source === 'public' ? 'Open Brewery DB https://www.openbrewerydb.org/documentation' : 'Internal Node.js API backed by a SQLite database' }}
         </div>
 
         <input
