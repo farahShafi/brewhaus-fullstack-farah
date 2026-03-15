@@ -1,7 +1,13 @@
 const openbreweryAPI = "https://api.openbrewerydb.org/v1"
 
-export async function getBreweries() {
-  const res = await fetch(`${openbreweryAPI}/breweries`)
+export async function getBreweries(page?: number, limit?:number, search?: string) {
+  let url = `${openbreweryAPI}/breweries?page=${page}&per_page=${limit || 200}`
+  const query = encodeURIComponent(search?.toString() || "")
+  if (search) {
+    url += `&by_name=${query}`
+  }
+  // avoid CORS errors when calling external APIs
+  const res = await fetch(url, { cache: "no-store" })
   return res.json()
 }
 

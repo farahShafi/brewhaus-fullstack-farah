@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from "vue"
+import { ref, onMounted, watch } from "vue"
 import { useBreweryStore } from "../store/brewery.ts"
 import { useSourceStore } from "../store/source.ts"
 import BreweryCard from "../components/breweryCard.vue"
@@ -8,23 +8,34 @@ import breweryImage from "../assets/beer-mug.svg"
 
 const breweryStore = useBreweryStore()
 const sourceStore = useSourceStore()
+const search = ref('')
 let timeout: ReturnType<typeof setTimeout>
 
 // methods
+watch(() => sourceStore.source, (newSource: string, oldSource: string) => {
+    console.log(newSource, oldSource)
+    clearSearch()
+    breweryStore.fetchBreweries() // reload breweries
+})
 
-function handleSearch(event: Event) {
+function handleSearch() {
 
-  const target = event.target as HTMLInputElement
+//   const target = 
   clearTimeout(timeout)
 
   timeout = setTimeout(() => {
-    breweryStore.fetchBreweries(undefined, target.value)
+    breweryStore.fetchBreweries(undefined, search.value)
   }, 300)
+}
+
+function clearSearch() {
+    search.value = ''
+    breweryStore.fetchBreweries()
 }
 
 // life cycle hooks
 onMounted(() => {
-    breweryStore.fetchBreweries(undefined, undefined)
+    breweryStore.fetchBreweries()
 })
 </script>
     
@@ -39,8 +50,10 @@ onMounted(() => {
         <input
             type="text"
             placeholder="Search breweries"
+            v-model="search"
             @input="handleSearch"
             />
+            <button @click="clearSearch">Clear</button>    
         
         <div class="grid">
             <BreweryCard 

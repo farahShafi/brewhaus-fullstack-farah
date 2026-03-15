@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { getBreweries, getBrewery } from '../services/breweryService-external'
 import { getBreweriesList, getBreweryItemById } from '../services/breweryService-internal'
-import type { Brewery, Pagination } from '../types/brewery'
+import type { Brewery } from '../types/brewery'
 import { useSourceStore } from './source'
 
 export const useBreweryStore = defineStore("brewery", () => {
@@ -24,13 +24,11 @@ export const useBreweryStore = defineStore("brewery", () => {
         loading.value = true
         let data
         if (useSourceStore().source === 'public') {
-            data = await getBreweries()
+            data = await getBreweries(page.value, limit, search)
             breweries.value = data
         } else {
             data = await getBreweriesList(page.value, limit, search)
             breweries.value = data.data
-            // console.log('pagination', pagination)
-            // pagination.value = data.pagination
         }
          
         // breweries.value = data.data
