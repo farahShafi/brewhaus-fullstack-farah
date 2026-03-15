@@ -76,3 +76,11 @@ Use the dropdown in the navbar to switch between:
 > Both the backend and frontend must be running to use the internal source.
 
 > **Note:** The Public Breweries source calls the Open Brewery DB API directly from the browser. This third-party API occasionally returns CORS errors (especially during search), which is outside our control. If this happens, switching to **Internal Breweries** is a reliable alternative.
+
+### Run as iOS app
+
+cd frontend
+npm install
+npm run build
+npx cap sync
+npx cap open ios
