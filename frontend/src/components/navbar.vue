@@ -10,7 +10,7 @@ const route = useRoute()
 function changeSource(event: Event) {
     const target = event.target as HTMLSelectElement
     store.setSource(target.value)
-    breweriesStore.fetchBreweries()
+    breweriesStore.resetSearch("")
 
 }
 
