@@ -12,3 +12,5 @@ const port = 3000
 app.listen(port, () => {
     console.log(`srever is running at http://localhost:${port}`)
 })
+
+export default app
