@@ -79,8 +79,10 @@ Use the dropdown in the navbar to switch between:
 
 ### Run as iOS app
 
+```bash
 cd frontend
 npm install
 npm run build
 npx cap sync
 npx cap open ios
+```
