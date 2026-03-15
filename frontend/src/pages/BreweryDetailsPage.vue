@@ -21,16 +21,8 @@
         try {
             loading.value = true
 
-    // check store cache first
-    const cached = breweryStore.breweriesMap[props.id]
-
-    // if (cached) {
-    //   brewery.value = cached
-    //   return
-    // }
-
-    // fallback to API (this will work when page is refreshed)
-    brewery.value = await breweryStore.getBreweryItem(props.id)
+            // fallback to API (this will work when page is refreshed)
+            brewery.value = await breweryStore.getBreweryItem(props.id)
         } catch (err) {
             error.value = "Failed to load"
             alert(error.value)
