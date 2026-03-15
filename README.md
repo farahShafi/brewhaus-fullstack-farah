@@ -74,3 +74,5 @@ Use the dropdown in the navbar to switch between:
 - **Internal Breweries** — fetches from your local backend at `http://localhost:3000`
 
 > Both the backend and frontend must be running to use the internal source.
+
+> **Note:** The Public Breweries source calls the Open Brewery DB API directly from the browser. This third-party API occasionally returns CORS errors (especially during search), which is outside our control. If this happens, switching to **Internal Breweries** is a reliable alternative.
