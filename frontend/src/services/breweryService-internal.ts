@@ -4,11 +4,12 @@ export async function getBreweriesList(
     page: number = 1, 
     limit: number = 20, 
     search?: string,
-    state?: string) {
+    state?: string,
+    source?: string ) {
 
 
     try {
-        const res = await fetch(`${internalNodeAPI}/breweries?page=${page}&limit=${limit}&search=${search || ""}&state=${state}`)
+        const res = await fetch(`${internalNodeAPI}/breweries?page=${page}&limit=${limit}&search=${search || ""}&state=${state}&source=${source}`)
         
         if (!res.ok) {
             throw new Error(`API Error: ${res.status}`)

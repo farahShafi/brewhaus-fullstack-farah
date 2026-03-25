@@ -41,22 +41,34 @@ export const useBreweryStore = defineStore("brewery", () => {
         try {
 
             let data
-            if (useSourceStore().source === 'public') {
-                console.log('public')
-                data = await getBreweries(page.value, limit.value, search.value, stateName.value, cityName.value)
-            } else {
-                const res = await getBreweriesList(page.value, limit.value, search.value, stateName.value)
-                data = res.data
-                if (page.value >= res.pagination.totalPages) hasMore.value = false
-                else page.value++
-            }
+            // Commenting out because we dont want to call different api for public and internal
+            // Now we are calling the same API and node backend will response back with the correct source of breweries
+
+            // if (useSourceStore().source === 'public') {
+            //     console.log('public')
+            //     data = await getBreweries(page.value, limit.value, search.value, stateName.value, cityName.value)
+            // } else {
+            //     const res = await getBreweriesList(page.value, limit.value, search.value, stateName.value)
+            //     data = res.data
+            //     if (page.value >= res.pagination.totalPages) hasMore.value = false
+            //     else page.value++
+            // }
+
+            const res = await getBreweriesList(page.value, limit.value, search.value, stateName.value, useSourceStore().source)
+            
+                if (useSourceStore().source === 'public') {
+                    data = res
+                    if (data.length < limit.value) hasMore.value = false
+                    else page.value++
+                } else {
+                    data = res.data
+                    if (page.value >= res.pagination.totalPages) hasMore.value = false
+                        else page.value++
+                    }
+                
 
             breweries.value.push(...data)
 
-            if (useSourceStore().source === 'public') {
-                if (data.length < limit.value) hasMore.value = false
-                else page.value++
-            }
 
         } catch (err) {
             console.error("Failed to fetch breweries", err)
