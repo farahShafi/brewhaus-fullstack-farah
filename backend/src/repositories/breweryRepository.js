@@ -1,13 +1,14 @@
 import db from "../db/database.js"
 
-export function findAll(limit, offset, search) {
+export function findAll(limit, offset, search, state) {
     const query = `
     SELECT * 
     FROM breweries
     WHERE NAME LIKE ?
+    AND STATE LIKE ?
     LIMIT ?
     OFFSET ?`
-    return db.prepare(query).all(`%${search}%`, limit, offset)
+    return db.prepare(query).all(`%${search}%`, `%${state}%`, limit, offset)
 }
 
 export function count(search) {

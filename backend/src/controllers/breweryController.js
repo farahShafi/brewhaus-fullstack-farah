@@ -5,8 +5,9 @@ export function getBreweries(req, res) {
         const page = parseInt(req.query.page) || 1
         const limit = parseInt(req.query.limit) || 10
         const search = req.query.search || ""
+        const state = req.query.state || ""
 
-        const breweries = breweryService.getBreweries(page, limit, search)
+        const breweries = breweryService.getBreweries(page, limit, search, state)
 
         res.json(breweries)
     } catch (err) {

@@ -3,11 +3,12 @@ const internalNodeAPI = "http://localhost:3000/api"
 export async function getBreweriesList(
     page: number = 1, 
     limit: number = 20, 
-    search?: string) {
+    search?: string,
+    state?: string) {
 
 
     try {
-        const res = await fetch(`${internalNodeAPI}/breweries?page=${page}&limit=${limit}&search=${search || ""}`)
+        const res = await fetch(`${internalNodeAPI}/breweries?page=${page}&limit=${limit}&search=${search || ""}&state=${state}`)
         
         if (!res.ok) {
             throw new Error(`API Error: ${res.status}`)

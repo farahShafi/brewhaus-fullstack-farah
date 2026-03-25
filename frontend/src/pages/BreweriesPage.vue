@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, watch } from "vue"
+import { onMounted, onUnmounted, watch, ref, computed } from "vue"
 import { useBreweryStore } from "../store/brewery.ts"
 import { useSourceStore } from "../store/source.ts"
 
@@ -11,6 +11,8 @@ import breweryImage from "../assets/beer-mug.svg"
 const breweryStore = useBreweryStore()
 const sourceStore = useSourceStore()
 
+const selectedState = ref("")
+
 let timeout: ReturnType<typeof setTimeout>
 
 
@@ -18,6 +20,11 @@ watch(() => sourceStore.source, (newSource: string, oldSource: string) => {
     console.log(newSource, oldSource)
     clearSearch()
 })
+
+// watch(() => breweryStore.stateName, (newName: any, oldName: any) => {
+//     console.log(newName, oldName)
+//     breweryStore.fetchBreweries()
+// })
 
 // methods
 
@@ -30,7 +37,7 @@ function handleSearch() {
 }
 
 function clearSearch() {
-    breweryStore.resetSearch("")
+    breweryStore.resetSearch(null)
 }
 
 function handleScroll() {
@@ -43,6 +50,31 @@ function handleScroll() {
         breweryStore.fetchBreweries()
     }
 }
+
+function changeState(event: Event) {
+    const target = event.target as HTMLSelectElement
+    breweryStore.stateName = target.value 
+    console.log('state selected', target.value)
+    breweryStore.resetSearch()
+}
+
+function clearState() {
+    selectedState.value = ""
+    breweryStore.stateName = ""
+    breweryStore.resetSearch()
+}
+
+function clearAll() {
+    selectedState.value = ""
+    breweryStore.stateName = ""
+    breweryStore.search = ""
+    breweryStore.resetSearch()
+}
+
+const states = computed(() => {
+  const unique = new Set(breweryStore.breweries.map(b => b.state))
+  return Array.from(unique)
+})
 
 // life cycle hooks
 onMounted(() => {
@@ -62,16 +94,30 @@ onUnmounted(() => {
         <div :class="['banner', sourceStore.source === 'public' ? 'banner-public' : 'banner-internal']">
             data loaded from {{ sourceStore.source === 'public' ? 'Open Brewery DB https://www.openbrewerydb.org/documentation' : 'Internal Node.js API backed by a SQLite database' }}
         </div>
-
+        <div>
+            <select v-model="selectedState" @change="changeState">
+                <option disabled value="">Select a state</option>
+                <option
+                    v-for="state in states"
+                    :key="state"
+                    :value="state"
+                >
+                    {{ state }}
+                </option>
+            </select>
+            <button @click="clearState">X</button>
+        </div>
+    
+        
         <input
             type="text"
             placeholder="Search breweries"
             v-model="breweryStore.search"
             @input="handleSearch"
-            />
-            <button :disabled="!breweryStore.search.length" @click="clearSearch">Clear</button>   
-            
-            <div v-if = "breweryStore.breweries.length > 0">count {{ breweryStore.breweries.length }}</div>
+        />
+        <button :disabled="!breweryStore.search.length" @click="clearSearch">X</button>  
+        <div><button @click="clearAll">Clear All</button></div>    
+        <div v-if = "breweryStore.breweries.length > 0">count {{ breweryStore.breweries.length }}</div>
         
         <div v-if="breweryStore.error === 'backend' && sourceStore.source === 'internal'" class="state-msg state-error">
             Backend is not running. Start the server at <code>localhost:3000</code> and refresh.

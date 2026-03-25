@@ -13,6 +13,8 @@ export const useBreweryStore = defineStore("brewery", () => {
     const search = ref("")
     const hasMore = ref(true)
     const limit = ref(20) // per page
+    const stateName = ref("")
+    const cityName = ref("")
 
     const breweriesMap = computed(() => {
         const map: Record<string, Brewery> = {}
@@ -35,13 +37,15 @@ export const useBreweryStore = defineStore("brewery", () => {
         loading.value = true
         error.value = null
 
+        
         try {
 
             let data
             if (useSourceStore().source === 'public') {
-                data = await getBreweries(page.value, limit.value, search.value)
+                console.log('public')
+                data = await getBreweries(page.value, limit.value, search.value, stateName.value, cityName.value)
             } else {
-                const res = await getBreweriesList(page.value, limit.value, search.value)
+                const res = await getBreweriesList(page.value, limit.value, search.value, stateName.value)
                 data = res.data
                 if (page.value >= res.pagination.totalPages) hasMore.value = false
                 else page.value++
@@ -63,8 +67,10 @@ export const useBreweryStore = defineStore("brewery", () => {
     }
 
     // reset and fetch first page
-    function resetSearch(query: string = "") {
-        search.value = query
+    function resetSearch(query?: string | null) {
+        if (query === null) search.value = ""
+        if (query?.length)  search.value = query
+       
         fetchBreweries(true)
     }
 
@@ -87,6 +93,8 @@ export const useBreweryStore = defineStore("brewery", () => {
         breweries,
         breweriesMap,
         page,
-        search
+        search,
+        stateName,
+        cityName,
     }
 })

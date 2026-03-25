@@ -3,15 +3,26 @@ const openbreweryAPI = "https://api.openbrewerydb.org/v1"
 export async function getBreweries(
   page: number = 1,
   limit: number = 20,
-  search?: string
-) {
+  search?: string,
+  state?: string,
+  city?: string,
 
+) {
+  console.log('city', city)
   try {
     let url = `${openbreweryAPI}/breweries?page=${page}&per_page=${limit}`
 
     if (search && search.trim().length > 0) {
       const query = encodeURIComponent(search)
       url += `&by_name=${query}`
+    }
+
+    if (state) {
+      url += `&by_state=${state}`
+    }
+
+    if (city) {
+      url += `&by_city=${city}`
     }
 
     const res = await fetch(url, {
