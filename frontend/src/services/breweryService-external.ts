@@ -8,7 +8,6 @@ export async function getBreweries(
   city?: string,
 
 ) {
-  console.log('city', city)
   try {
     let url = `${openbreweryAPI}/breweries?page=${page}&per_page=${limit}`
 

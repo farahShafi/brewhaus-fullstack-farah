@@ -2,6 +2,15 @@
 import { useBreweryStore } from '../store/brewery';
 import { useSourceStore } from '../store/source';
 import { useRoute } from 'vue-router';
+import { useAuthStore } from '../store/auth';
+
+import { isAuthenticated, logout } from '../services/auth';
+import { computed, onMounted } from 'vue';
+
+ const props = defineProps<{
+        isAuthenticated: string | boolean
+    }>()
+const authStore = useAuthStore()
 
 const store = useSourceStore()
 const breweriesStore = useBreweryStore()
@@ -11,7 +20,6 @@ function changeSource(event: Event) {
     const target = event.target as HTMLSelectElement
     store.setSource(target.value)
     breweriesStore.resetSearch("")
-
 }
 
 
@@ -20,8 +28,9 @@ function changeSource(event: Event) {
   <nav class="navbar">
     <div class="logo">BrewHaus</div>
 
-    <ul class="nav-links">
+    <ul v-if="authStore.isLoggedIn" class="nav-links">
       <li><a href="/">Home</a></li>
+      <li><a href="" @click="logout()">Logout</a></li>
       <li>
         <select v-if="route.name === 'breweries'" :value="store.source" @change="changeSource($event)">
             <option value="public">Public Breweries</option>
