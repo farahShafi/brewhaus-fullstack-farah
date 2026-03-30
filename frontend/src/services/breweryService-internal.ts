@@ -6,10 +6,17 @@ export async function getBreweriesList(
     search?: string,
     state?: string,
     source?: string ) {
-
+    
 
     try {
-        const res = await fetch(`${internalNodeAPI}/breweries?page=${page}&limit=${limit}&search=${search || ""}&state=${state}&source=${source}`)
+        const token = localStorage.getItem("token")
+        const res = await fetch(`${internalNodeAPI}/breweries?page=${page}&limit=${limit}&search=${search || ""}&state=${state}&source=${source}`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        )
         
         if (!res.ok) {
             throw new Error(`API Error: ${res.status}`)
@@ -30,8 +37,15 @@ export async function getBreweriesList(
 }
 
 export async function getBreweryItemById(id: string) {
+    const token = localStorage.getItem("token")
     try {
-        const res = await fetch (`${internalNodeAPI}/breweries/${id}`)
+        const res = await fetch (`${internalNodeAPI}/breweries/${id}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        )
 
         if (!res.ok) {
             throw new Error(`API Error: ${res.status}`)
