@@ -1,29 +1,80 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
+import { onMounted, ref } from "vue";
 
 import type { Brewery } from '../types/brewery'
 
 const router = useRouter()
 
 const props = defineProps<{
-    brewery: Brewery
+    brewery: Brewery,
+    edit: Boolean
 }>()
 
+const emit = defineEmits(['cancelEdit', 'saveEdit'])
+
+
+const form = ref({
+    id: props.brewery.id,
+    name: props.brewery.name,
+    brewery_type: props.brewery.brewery_type
+})
+
 function goToDetails() {
-    router.push(`/brewery/${props.brewery.id}`)
+    if (!props.edit) {
+        router.push(`/brewery/${props.brewery.id}`)
+    }
 }
+function cancelEdit() {
+    emit('cancelEdit')
+}
+function save() {
+    emit('saveEdit', form)
+}
+
 </script>
 
 <template>
     <div>
         <div class="brewery-card" @click="goToDetails">
-            <h3>{{ brewery.name }}</h3>
-            <p>
-                {{ brewery.city }}, {{ brewery.state }}
-            </p>
-            <p>
-                Type: {{ brewery.brewery_type }}
-            </p>
+            <template v-if="props.edit">
+                <div>
+                    <div>
+                        <label for="brewery-name">Brewery Name:</label>
+                        <input
+                            v-model="form.name"
+                            placeholder="Brewery Name"
+                        />
+                    </div>
+                    
+                    <div>
+                        <label for="brewery-name">Choose Type:</label>
+                        <select v-model="form.brewery_type" label="Type:">
+                            <option value="micro">Micro</option>
+                            <option value="nano">Nano</option>
+                            <option value="regional">Regional</option>
+                            <option value="brewpub">Brewpub</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                    
+
+                    <div class="actions">
+                        <button @click.stop="save">Save</button>
+                        <button @click.stop="cancelEdit">Cancel</button>                
+                    </div>
+                </div>
+                
+            </template>
+            <template v-else>
+                <h3>{{ brewery.name }}</h3>
+                <p>
+                    {{ brewery.city }}, {{ brewery.state }}
+                </p>
+                <p>
+                    Type: {{ brewery.brewery_type }}
+                </p>
+            </template>
             <!-- Slot for extra content -->
             <slot></slot>
         </div>

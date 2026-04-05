@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { getBreweries, getBrewery } from '../services/breweryService-external'
-import { getBreweriesList, getBreweryItemById } from '../services/breweryService-internal'
+import { getBreweriesList, getBreweryItemById, updateBreweryItem } from '../services/breweryService-internal'
 import type { Brewery } from '../types/brewery'
 import { useSourceStore } from './source'
+import { io } from 'socket.io-client'
 
 export const useBreweryStore = defineStore("brewery", () => {
     const breweries = ref<Brewery[]>([])
@@ -22,6 +23,16 @@ export const useBreweryStore = defineStore("brewery", () => {
             map[brewery.id] = brewery
         }))
         return map
+    })
+
+    const socket = io('http://localhost:3000')
+
+    socket.on('connect', () => {
+        console.log('Connected:', socket.id)
+    })
+
+    socket.on('breweryUpdated', (data) => {
+        updateBreweryItemState(data)
     })
 
     // fetch breweries with lazy load support
@@ -95,9 +106,39 @@ export const useBreweryStore = defineStore("brewery", () => {
         }
     }
 
+    async function updateBreweryItemState(data: Brewery) {
+        const index = breweries.value.findIndex(b => b.id === data.id)
+        if (index !== -1) breweries.value[index] = data
+
+        // Also update map if using
+        breweriesMap.value[data.id] = data        
+    }
+
+    async function updateBrewery(id: string, data: Brewery) {
+        // return updateBreweryItem(id, data)
+        try {
+        // Call API
+        const updated = await updateBreweryItem(id, data)
+        
+        console.log('updated', updated)
+        if (!updated) return null
+            console.log('in store update func')
+        // Update local Pinia state
+
+        updateBreweryItemState(updated)
+
+        return updated
+      } catch (err) {
+        console.error("Failed to update brewery in store", err)
+        throw err
+      }
+    }
+
     return {
         fetchBreweries,
         getBreweryItem,
+        updateBrewery,
+        updateBreweryItemState,
         resetSearch,
         loading,
         error,

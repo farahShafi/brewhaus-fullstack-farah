@@ -1,6 +1,6 @@
 # BrewHaus
 
-A fullstack brewery browser app. Browse breweries from the public [Open Brewery DB](https://www.openbrewerydb.org/) or from a local internal API backed by a SQLite database.
+A fullstack brewery browser app. Browse breweries from the public [Open Brewery DB](https://www.openbrewerydb.org/) or from a local internal API backed by a SQLite database. The backend sends realtime updates via socket.io and redis.
 
 ## Project Structure
 
@@ -23,7 +23,11 @@ brewhaus-fullstack-farah/
 ### Prerequisites
 
 - Node.js v18+
+- Redis
 
+if Redis in not running on local you have to install it via below commands 
+brew install redis
+brew services start redis
 ---
 
 ### Backend

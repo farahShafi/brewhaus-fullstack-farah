@@ -24,6 +24,27 @@ export async function getBreweries(req, res) {
     
 }
 
+export async function updateBrewery(req, res) {
+    try {
+        const { id } = req.params
+        const data = req.body
+
+        const updated = await breweryService.update(id, data)
+
+        if(!updated) {
+            return res.status(404).json({
+                message: 'Brewery not found'
+            })
+        }
+
+        
+        return res.json(updated);
+    } catch(err) {
+        console.error(err)
+        res.status(500).json({ error: "Failed to update"})
+    }
+}
+
 export function getBrewery(req, res) {
     const { id } = req.params
     const brewery = breweryService.getBrewery(id)

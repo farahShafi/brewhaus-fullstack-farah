@@ -17,6 +17,10 @@ export function getBreweries(page, limit, search, state) {
 
 }
 
+export function update(id, data) {
+    return breweryRepository.update(id, data)
+}
+
 export function getBrewery(id) {
     return breweryRepository.findById(id)
 }

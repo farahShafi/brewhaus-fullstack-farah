@@ -1,3 +1,5 @@
+import type { Brewery } from "../types/brewery"
+
 const internalNodeAPI = "http://localhost:3000/api"
 
 export async function getBreweriesList(
@@ -27,6 +29,26 @@ export async function getBreweriesList(
         return []
     }   
     
+}
+
+export async function updateBreweryItem(id: string, data: Brewery) {
+    try { 
+        console.log('data in internal', data)
+        const res = await fetch (`${internalNodeAPI}/breweries/${id}`, 
+            {
+                method: "PUT",
+                headers: {
+                "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+        if (!res) {
+            throw new Error(`API Error: ${res}`)
+        }    
+        return await res.json()
+    } catch (err: any) {
+        console.error(" failed to update brewery", err)
+    }
 }
 
 export async function getBreweryItemById(id: string) {

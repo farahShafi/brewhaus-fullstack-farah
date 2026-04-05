@@ -131,7 +131,8 @@ onUnmounted(() => {
             <BreweryCard
                 v-for="brewery in breweryStore.breweries"
                 :key="brewery?.id"
-                :brewery="brewery">
+                :brewery="brewery"
+                :edit="false">
             </BreweryCard>
         </div>
     </div>
