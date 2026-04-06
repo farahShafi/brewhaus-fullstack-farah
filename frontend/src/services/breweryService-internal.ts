@@ -63,6 +63,14 @@ export async function getBreweryItemById(id: string) {
      } catch (err: any) {
         console.error("Failed to fetch brewery:", err)
         return null
-    } 
-    
+    }     
+}
+
+export async function getDashboardData() {
+    try {
+        const res = await fetch (`${internalNodeAPI}/breweries/dashboard`)
+        return await res.json()
+    } catch (err) {
+        console.error(" failed to get Dashboard", err)
+    }
 }

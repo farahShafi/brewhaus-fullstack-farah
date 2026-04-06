@@ -1,13 +1,16 @@
 # BrewHaus
 
-A fullstack brewery browser app. Browse breweries from the public [Open Brewery DB](https://www.openbrewerydb.org/) or from a local internal API backed by a SQLite database. The backend sends realtime updates via socket.io and redis.
+A fullstack brewery browser app. Browse breweries from a local internal API backed by a SQLite database or from the public [Open Brewery DB](https://www.openbrewerydb.org/). 
+It is a brewery management dashboard with real-time updates and data visualization.
+When fetching data from internal node backend, you can edit a brewery's name and type, and see realtime socket events updates. Also see data visualiztion in dashboard.
+When fetching data from external source (https://www.openbrewerydb.org/), cannot edit brewery and no data visualization is available.
 
 ## Project Structure
 
 ```
 brewhaus-fullstack-farah/
-├── backend/    # Node.js + Express + SQLite API
-└── frontend/   # Vue 3 + Vite + Pinia SPA
+├── backend/    # Node.js + Express + SQLite API + Redis + socket.io
+└── frontend/   # Vue 3 + Vite + Pinia SPA + chart.js
 ```
 
 ## Features

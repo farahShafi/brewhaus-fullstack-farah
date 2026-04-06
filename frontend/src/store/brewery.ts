@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { getBreweries, getBrewery } from '../services/breweryService-external'
-import { getBreweriesList, getBreweryItemById, updateBreweryItem } from '../services/breweryService-internal'
+import { getBreweriesList, getBreweryItemById, updateBreweryItem, getDashboardData } from '../services/breweryService-internal'
 import type { Brewery } from '../types/brewery'
 import { useSourceStore } from './source'
 import { io } from 'socket.io-client'
@@ -16,6 +16,7 @@ export const useBreweryStore = defineStore("brewery", () => {
     const limit = ref(20) // per page
     const stateName = ref("")
     const cityName = ref("")
+    const dashboard = ref(null)
 
     const breweriesMap = computed(() => {
         const map: Record<string, Brewery> = {}
@@ -134,12 +135,25 @@ export const useBreweryStore = defineStore("brewery", () => {
       }
     }
 
+    async function getDashboard() {
+        try {
+            const res = await getDashboardData()
+            dashboard.value = res
+            return res
+        } catch (err) {
+            console.error("Failed to get dashboard in store", err)
+            throw err
+        }
+    }
+
     return {
         fetchBreweries,
         getBreweryItem,
         updateBrewery,
         updateBreweryItemState,
         resetSearch,
+        getDashboard,
+        dashboard,
         loading,
         error,
         hasMore,

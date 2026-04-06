@@ -64,3 +64,55 @@ export function findById(id) {
 export function findByName(name) {
     return db.prepare("SELECT * FROM breweries WHERE name = ?").get(name)
 }
+
+export async function getDashboard() {
+    const totalCountQuery = `
+    SELECT COUNT(*) as total
+    FROM breweries
+    `
+    const totalCount = db.prepare(totalCountQuery).get()
+
+    const locationResultQuery = `
+    SELECT state, COUNT(*) AS count
+    FROM breweries
+    GROUP BY state
+    ORDER BY count DESC
+    `
+
+    const locationResult = db.prepare(locationResultQuery).all()
+
+    const typeResultQuery = `
+    SELECT brewery_type, COUNT(*) as count
+    FROM breweries
+    GROUP BY brewery_type
+    ORDER BY count DESC
+    `
+
+    const typeResult = db.prepare(typeResultQuery).all()
+
+    const finalResult = {
+        total: totalCount,
+        byLocation: locationResult.map(row => ({
+            location: row.state,
+            count: Number(row.count)
+        })),
+        byType: typeResult.map(row => ({
+            type: row.brewery_type,
+            count: Number(row.count)
+        }))
+    }
+    return finalResult
+    // return format
+    // {
+    //     "total": 1245,
+    //     "byLocation": [
+    //         { "location": "California", "count": 300 },
+    //         { "location": "Texas", "count": 200 }
+    //     ],
+    //     "bySize": [
+    //         { "size": "Small", "count": 700 },
+    //         { "size": "Medium", "count": 400 },
+    //         { "size": "Large", "count": 145 }
+    //     ]
+    // }
+}

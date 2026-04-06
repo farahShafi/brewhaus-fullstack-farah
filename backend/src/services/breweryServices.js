@@ -24,3 +24,7 @@ export function update(id, data) {
 export function getBrewery(id) {
     return breweryRepository.findById(id)
 }
+
+export function getDashboard() {
+    return breweryRepository.getDashboard()
+}

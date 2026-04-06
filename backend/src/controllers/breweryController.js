@@ -50,3 +50,13 @@ export function getBrewery(req, res) {
     const brewery = breweryService.getBrewery(id)
     res.json(brewery)
 }
+
+export async function getDashboard(req, res) {
+    try {
+        const result = await breweryService.getDashboard()
+        return res.json(result)
+    } catch(err) {
+        console.error(err)
+        res.status(500).json({ error: "Failed to get Dashboard data"})
+    }
+}

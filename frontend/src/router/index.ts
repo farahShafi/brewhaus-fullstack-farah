@@ -11,6 +11,12 @@ const routes: Array<RouteRecordRaw> = [
     name: "brewery-details",
     component: () => import("../pages/BreweryDetailsPage.vue"), //lazy loading
     props: true
+  },
+  {
+    path: "/brewery/dashboard",
+    name: "breweries-dashboard",
+    component: () => import("../pages/BreweriesDashboard.vue"), //lazy loading
+    props: true
   }
 ]
 

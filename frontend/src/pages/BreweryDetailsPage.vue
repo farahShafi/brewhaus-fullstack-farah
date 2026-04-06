@@ -56,6 +56,7 @@
     }
     
     onMounted(loadBrewery)
+
 </script>
 
 <template>

@@ -22,6 +22,7 @@ function changeSource(event: Event) {
 
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
+      <li v-if="store.source === 'internal'"><a href="/brewery/dashboard">Dashboard</a></li>
       <li>
         <select v-if="route.name === 'breweries'" :value="store.source" @change="changeSource($event)">
             <option value="public">Public Breweries</option>
