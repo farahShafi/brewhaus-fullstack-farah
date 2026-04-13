@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
-import { onMounted, ref } from "vue";
+import {  ref } from "vue";
 
 import type { Brewery } from '../types/brewery'
 
@@ -29,6 +29,7 @@ function cancelEdit() {
     emit('cancelEdit')
 }
 function save() {
+    console.log('save clicked')
     emit('saveEdit', form)
 }
 
@@ -39,16 +40,16 @@ function save() {
         <div class="brewery-card" @click="goToDetails">
             <template v-if="props.edit">
                 <div>
-                    <div>
-                        <label for="brewery-name">Brewery Name:</label>
+                    <div class="form-input">
+                        <label class="form-label" for="brewery-name">Brewery Name:</label>
                         <input
                             v-model="form.name"
                             placeholder="Brewery Name"
                         />
                     </div>
                     
-                    <div>
-                        <label for="brewery-name">Choose Type:</label>
+                    <div class="form-input">
+                        <label class="form-label" for="brewery-name">Choose Type:</label>
                         <select v-model="form.brewery_type" label="Type:">
                             <option value="micro">Micro</option>
                             <option value="nano">Nano</option>
@@ -60,8 +61,8 @@ function save() {
                     
 
                     <div class="actions">
-                        <button @click.stop="save">Save</button>
-                        <button @click.stop="cancelEdit">Cancel</button>                
+                        <button class="breweryButton" @click.stop="save">Save</button>
+                        <button class="breweryButton" @click.stop="cancelEdit">Cancel</button>                
                     </div>
                 </div>
                 
@@ -118,5 +119,26 @@ function save() {
         margin-top: auto;
         color: var(--accent);
         font-weight: 500;
+    }
+    .breweryButton {
+        margin: 5px;
+        background: var(--accent);
+        border: none;
+        border-radius: 5px;
+        color: white;
+        padding: 4px 9px;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .form-label {
+        margin-right: 10px;
+        font-weight: 500;
+    }
+    .form-input {
+        margin-bottom: 12px;
     }
 </style>

@@ -105,7 +105,7 @@ onUnmounted(() => {
                     {{ state }}
                 </option>
             </select>
-            <button @click="clearState">X</button>
+            <button class="breweryButton" @click="clearState">X</button>
         </div>
     
         
@@ -115,9 +115,9 @@ onUnmounted(() => {
             v-model="breweryStore.search"
             @input="handleSearch"
         />
-        <button :disabled="!breweryStore.search.length" @click="clearSearch">X</button>  
-        <div><button @click="clearAll">Clear All</button></div>    
-        <div v-if = "breweryStore.breweries.length > 0">count {{ breweryStore.breweries.length }}</div>
+        <button class="breweryButton" :disabled="!breweryStore.search.length" @click="clearSearch">X</button>  
+        <div><button class="breweryButton" @click="clearAll">Clear All</button></div>    
+        <div v-if = "breweryStore.breweries.length > 0">Loaded item count {{ breweryStore.breweries.length }}</div>
         
         <div v-if="breweryStore.error === 'backend' && sourceStore.source === 'internal'" class="state-msg state-error">
             Backend is not running. Start the server at <code>localhost:3000</code> and refresh.
@@ -179,5 +179,14 @@ onUnmounted(() => {
 
     .state-empty {
         color: #888;
+    }
+    .breweryButton {
+        margin: 8px;
+        background: var(--accent);
+        border: none;
+        border-radius: 5px;
+        color: white;
+        padding: 4px 9px;
+        cursor: pointer;
     }
 </style>

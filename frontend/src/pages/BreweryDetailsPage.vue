@@ -68,7 +68,7 @@
 
     <div v-else-if="brewery" class="card">
       <Header :image="breweryImage" :title="title"></Header>
-      <button class="edit-button" v-if="sourceStore.source === 'internal' && !isEdit" @click="isEdit = true">&#9998</button>
+      <button class="edit-button" v-if="sourceStore.source === 'internal' && !isEdit" @click="isEdit = true">EDIT</button>
       <BreweryCard 
         :key="brewery?.id" 
         :brewery="brewery"
@@ -99,7 +99,7 @@
     .edit-button {
         display: inline-block;
         font-family: var(--sans);
-        font-size: 16px;
+        /* font-size: 16px; */
         font-weight: 500;
         line-height: 1.4;
         color: var(--bg); /* text on colored background */
@@ -107,12 +107,11 @@
         border: 2px solid var(--accent-border);
         border-radius: 8px;
         cursor: pointer;
-        transition: all 0.2s ease-in-out;
         box-shadow: var(--shadow);
         text-align: center;
         text-decoration: none;
         display: inline-block;
-        transform: rotateZ(90deg);
+        margin-bottom: 10px;
     }
 
 </style>
